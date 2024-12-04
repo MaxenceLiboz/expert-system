@@ -6,5 +6,15 @@ int main(int argc, char **argv) {
     for (int i = 1; i < argc; i++) {
         std::cout << argv[i] << std::endl;
     }
+
+    std::unordered_set<Letter, HashLetter> letters;
+    letters.insert(Letter('A', true, INIT_FACTS));
+    letters.insert(Letter('B', true, INIT_FACTS));
+
+    std::unordered_set<Rule, HashRule> rules;
+    rules.insert(Rule("A | B => C"));
+
+    ExpertSys expertSys(letters, rules);
+
     return 0;
 }

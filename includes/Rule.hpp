@@ -6,9 +6,10 @@
 #include <queue>
 #include <unordered_map>
 #include <algorithm>
+#include <stdexcept>
 
-#include "utils.hpp"
 #include "Letter.hpp"
+#include "Sign.hpp"
 
 
 class Rule
@@ -18,6 +19,8 @@ private:
     std::vector<char>   letters;
 
     void verifyRule();
+    void verifyNextLetter(char &c, std::size_t &index);
+    void verifyNextSign(std::string &sign, std::size_t &index);
     
 public:
     Rule(std::string rule);

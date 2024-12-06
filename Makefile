@@ -15,7 +15,6 @@ SRCS = 	main.cpp	 	\
 		Letter.cpp		\
 		Rule.cpp		\
 		ExpertSys.cpp	\
-		utils.cpp		\
 		Sign.cpp
 		
 NAME = expert-system

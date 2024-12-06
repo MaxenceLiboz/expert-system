@@ -16,9 +16,33 @@ void Rule::verifyRule() {
     this->value.erase(std::remove_if(this->value.begin(), this->value.end(), isspace), this->value.end());
 
     while (index < this->value.size()) {
-        readNextLetter(this->value, letter, index);
+        verifyNextLetter(letter, index);
         this->letters.push_back(letter);
-        readNextSign(this->value, sign, index);
+        verifyNextSign(sign, index);
+    }
+}
+
+void Rule::verifyNextLetter(char &c, std::size_t &index) {
+    if (this->value[index] == '(' || this->value[index] == '!') {
+        index++;
+    }
+    if (!isalpha(this->value[index])){
+        throw std::invalid_argument("Error occured in this->value: " + this->value + ". Char \'" + this->value[index] + "\' where given at index " + std::to_string(index) + " instead of letter");
+    }
+    c = this->value[index++];
+    if (this->value[index] == ')') {
+        index++;
+    }
+}
+
+void Rule::verifyNextSign(std::string &sign, std::size_t &index) {
+    std::size_t start = index;
+    while (index < this->value.size() && !isalpha(this->value[index])) {
+        index++;
+    }
+    sign = this->value.substr(start, index - start);
+    if (!Sign::isSign(sign) && sign != ""){
+        throw std::invalid_argument("Error occured in this->value: " + this->value + ". Sign \'" + sign + "\' but it is not valid.");
     }
 }
 

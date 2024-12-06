@@ -1,36 +1,51 @@
 #include "Rule.hpp"
 
 Rule::Rule(std::string rule) {
-    this->name = rule;
+    this->value = rule;
 
-    this->initCalculus();
+    this->verifyRule();
 }
 
 Rule::~Rule() {}
 
-std::string Rule::getName() const {
-    return this->name;
-}
+void Rule::verifyRule() {
+    std::size_t index = 0;
+    char        letter;
+    std::string sign;
 
-void Rule::setName(std::string name) {
-    this->name = name;
-}
+    this->value.erase(std::remove_if(this->value.begin(), this->value.end(), isspace), this->value.end());
 
-Rule::calculusType Rule::getCalculus() const {
-    return this->calculus;
-}
-
-bool Rule::operator==(const Rule &rule) const {
-    return this->name == rule.getName();
-}
-
-void Rule::initCalculus() {
-    for (char c : this->name) {
-        (void)c;
-        break;
+    while (index < this->value.size()) {
+        readNextLetter(this->value, letter, index);
+        this->letters.push_back(letter);
+        readNextSign(this->value, sign, index);
     }
 }
 
+std::string Rule::getValue() const {
+    return this->value;
+}
+
+void Rule::setValue(std::string value) {
+    this->value = value;
+}
+
+std::vector<char>  Rule::getLettersNeeded() const {
+    return this->letters;
+}
+
+bool Rule::operator==(const Rule &rule) const {
+    return this->value == rule.getValue();
+}
+
 std::size_t HashRule::operator()(const Rule &rule) const {
-    return std::hash<std::string>{}(rule.getName());
+    return std::hash<std::string>{}(rule.getValue());
+}
+
+void Rule::solveForLetter(std::unordered_map<char, Letter> &letters, char querry) {
+    // Do the calculation
+
+    if (querry == 'N') {
+        letters.at(0);
+    }
 }

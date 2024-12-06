@@ -2,7 +2,7 @@
 #define LETTER_HPP
 
 #include <string>
-#include <unordered_set>
+#include <vector>
 
 enum LetterValueFrom {
     DEFAULT,
@@ -13,13 +13,11 @@ enum LetterValueFrom {
 class Letter
 {
 private:
-    typedef std::unordered_set<std::string> associateRulesNameType;
-
     char            letter;
     bool            value = false;
 
     LetterValueFrom valueFrom = DEFAULT;
-    associateRulesNameType associateRulesName;
+    std::vector<std::string> associateRulesValue;
 
 public:
 
@@ -35,6 +33,8 @@ public:
 
     void                setValue(bool value);
     void                setValueFrom(LetterValueFrom valueFrom);
+
+    void                addAssociateRuleValue(const std::string ruleName);
 
     bool                operator==(const Letter &letter) const;
 

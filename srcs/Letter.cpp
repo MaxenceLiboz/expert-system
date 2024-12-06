@@ -31,6 +31,10 @@ void Letter::setValueFrom(LetterValueFrom valueFrom) {
     this->valueFrom = valueFrom;
 }
 
+void Letter::addAssociateRuleValue(std::string ruleName) {
+    this->associateRulesValue.push_back(ruleName);
+}
+
 bool Letter::operator==(const Letter &letter) const {
     return this->letter == letter.getLetter();
 }

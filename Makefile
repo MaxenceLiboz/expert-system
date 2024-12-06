@@ -11,11 +11,11 @@ COLOR_BLUE	=	\033[36m
 ################################################################################
 CACHE = .cache
 SRCS_DIR = srcs
-SRCS = 	main.cpp 	\
-		Letter.cpp	\
-		Rule.cpp	\
-		ExpertSys.cpp\
-		PropositionalCalculus.cpp \
+SRCS = 	main.cpp	 	\
+		Letter.cpp		\
+		Rule.cpp		\
+		ExpertSys.cpp	\
+		utils.cpp		\
 		Sign.cpp
 		
 NAME = expert-system

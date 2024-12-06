@@ -5,28 +5,32 @@
 #include <map>
 #include <queue>
 #include <unordered_map>
+#include <algorithm>
+
+#include "utils.hpp"
+#include "Letter.hpp"
 
 
 class Rule
 {
 private:
-    typedef std::vector<std::pair<std::string, bool>> calculusType;
+    std::string         value;
+    std::vector<char>   letters;
 
-    std::string name;
-    calculusType calculus;
-
-    void            initCalculus();
-
+    void verifyRule();
+    
 public:
     Rule(std::string rule);
     ~Rule();
 
-    std::string     getName() const;
-    calculusType    getCalculus() const;
+    std::string         getValue() const;
+    std::vector<char>   getLettersNeeded() const;
 
-    void            setName(std::string name);
+    void                setValue(std::string value);
 
-    bool            operator==(const Rule &rule) const;
+    bool                operator==(const Rule &rule) const;
+
+    void                solveForLetter(std::unordered_map<char, Letter> &letters, char querry);
 };
 
 struct HashRule

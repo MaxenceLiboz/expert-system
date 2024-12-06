@@ -1,12 +1,10 @@
 
 #include "Sign.hpp"
 
-Sign::Sign(Enum sign) : value(sign) {}
-Sign::~Sign(){}
 
-std::string Sign::toString() const
+std::string Sign::toString(Enum sign)
 {
-    switch (this->value) {
+    switch (sign) {
         case AND: return "+";
         case OR: return "|";
         case NOT: return "!";
@@ -15,4 +13,14 @@ std::string Sign::toString() const
         case IF_ONLY_IF: return "<=>";
         default: throw std::invalid_argument("The sign is not supported"); 
     }
+}
+
+bool Sign::isSign(std::string sign) {
+
+    if (Sign::toString(Sign::AND) == sign || Sign::toString(Sign::OR) == sign
+        || Sign::toString(Sign::NOT) == sign || Sign::toString(Sign::XOR) == sign
+        || Sign::toString(Sign::IMPLIES) == sign || Sign::toString(Sign::IF_ONLY_IF) == sign) {
+        return true;
+    }
+    return false;
 }

@@ -13,11 +13,6 @@ public:
         IF_ONLY_IF
     };
 
-    Sign(Enum sign);
-    ~Sign();
-
-    std::string toString() const;
-
-private:
-    Enum value;
+    static std::string  toString(Enum sign);
+    static bool         isSign(std::string sign);
 };

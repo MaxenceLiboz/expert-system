@@ -12,7 +12,7 @@ ExpertSys::ExpertSys(std::unordered_map<char, Letter> letters, std::unordered_ma
     for (std::string ruleName : rulesToSovle) {
         auto it = this->rules.find(ruleName);
         if (it != this->rules.end()) {
-            it->second.solveForLetter(letters, querries[0]);
+            it->second.solveForLetter(it->second.getValue(), letters);
         } else {
             throw std::invalid_argument("Problem with the rule " + ruleName);
         }

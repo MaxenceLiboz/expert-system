@@ -7,9 +7,10 @@
 #include <unordered_map>
 #include <algorithm>
 #include <stdexcept>
+#include <stack>
 
 #include "Letter.hpp"
-#include "Sign.hpp"
+#include "Operator.hpp"
 
 
 class Rule
@@ -18,10 +19,13 @@ private:
     std::string         value;
     std::vector<char>   letters;
 
-    void verifyRule();
-    void verifyNextLetter(char &c, std::size_t &index);
-    void verifyNextSign(std::string &sign, std::size_t &index);
-    
+    void        verifyRule();
+    void        verifyNextLetter(std::size_t &index, char &c);
+    void        verifyNextOperator(std::size_t &index, bool &isRightSide);
+
+    static bool isLetter(const std::string &expr, std::size_t &index, LetterValue &letterValue, std::unordered_map<char, Letter> &letters);
+    static bool isOperator(const std::string &expr, std::size_t &index, Operator &op);
+
 public:
     Rule(std::string rule);
     ~Rule();
@@ -33,7 +37,7 @@ public:
 
     bool                operator==(const Rule &rule) const;
 
-    void                solveForLetter(std::unordered_map<char, Letter> &letters, char querry);
+    static LetterValue  solveForLetter(const std::string &expr, std::unordered_map<char, Letter> &letters);
 };
 
 struct HashRule

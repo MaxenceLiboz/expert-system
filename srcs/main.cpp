@@ -8,13 +8,13 @@ int main(int argc, char **argv) {
     }
 
     std::unordered_map<char, Letter> letters;
-    letters.insert(std::make_pair('A', Letter('A', true, INIT_FACTS)));
-    letters.insert(std::make_pair('B', Letter('B', true, INIT_FACTS)));
-    letters.insert(std::make_pair('C', Letter('C', true, INIT_FACTS)));
-    letters.insert(std::make_pair('D', Letter('D', true, DEFAULT)));
+    letters.insert(std::make_pair('A', Letter('A', TRUE, INIT_FACTS)));
+    letters.insert(std::make_pair('B', Letter('B', TRUE, INIT_FACTS)));
+    letters.insert(std::make_pair('C', Letter('C')));
+    letters.insert(std::make_pair('D', Letter('D')));
 
     std::unordered_map<std::string, Rule> rules;
-    rules.insert(std::make_pair("A | B + C => D", Rule("A | B + C => D")));
+    rules.insert(std::make_pair("A | (B + C) => D", Rule("A | (B + C) => D")));
 
     std::vector<char> querries = std::vector<char>{'D'};
 

@@ -10,11 +10,17 @@ enum LetterValueFrom {
     RULES
 };
 
+enum LetterValue {
+    FALSE,
+    TRUE,
+    UNDEFINED
+};
+
 class Letter
 {
 private:
     char            letter;
-    bool            value = false;
+    LetterValue     value = FALSE;
 
     LetterValueFrom valueFrom = DEFAULT;
     std::vector<std::string> associateRulesValue;
@@ -22,16 +28,17 @@ private:
 public:
 
     Letter(char letter);
-    Letter(char letter, bool value, LetterValueFrom valueFrom);
+    Letter(char letter, LetterValue value, LetterValueFrom valueFrom);
     ~Letter();
 
 
     char                getLetter() const;
-    bool                getValue() const;
+    LetterValue         getValue() const;
+    LetterValue         getInverseValue() const;
     LetterValueFrom     getValueFrom() const;
 
 
-    void                setValue(bool value);
+    void                setValue(LetterValue value);
     void                setValueFrom(LetterValueFrom valueFrom);
 
     void                addAssociateRuleValue(const std::string ruleName);

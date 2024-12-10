@@ -2,9 +2,11 @@
 
 Letter::Letter(char letter) {
     this->letter = letter;
+    this->value = FALSE;
+    this->valueFrom = DEFAULT;
 }
 
-Letter::Letter(char letter, bool value, LetterValueFrom valueFrom) {
+Letter::Letter(char letter, LetterValue value, LetterValueFrom valueFrom) {
     this->letter = letter;
     this->value = value;
     this->valueFrom = valueFrom;
@@ -16,14 +18,28 @@ Letter::~Letter() {}
 char Letter::getLetter() const {
     return this->letter;
 }
-bool Letter::getValue() const {
+
+LetterValue Letter::getValue() const {
     return this->value;
 }
+
+LetterValue Letter::getInverseValue() const {
+    switch (this->value)
+    {
+        case TRUE:
+            return FALSE;
+        case FALSE:
+            return TRUE;
+        default:
+            return UNDEFINED;
+    }
+}
+
 LetterValueFrom Letter::getValueFrom() const {
     return this->valueFrom;
 }
 
-void Letter::setValue(bool value) {
+void Letter::setValue(LetterValue value) {
     this->value = value;
 }
 

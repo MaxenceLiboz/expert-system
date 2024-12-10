@@ -51,6 +51,25 @@ void Letter::addAssociateRuleValue(std::string ruleName) {
     this->associateRulesValue.push_back(ruleName);
 }
 
+bool Letter::findIsLetter(const std::string &expr, std::size_t &index, LetterValue &letterValue, std::unordered_map<char, Letter> &letters) {
+    bool isNegative = false;
+    if (expr[index] == '!') {
+        isNegative = true;
+        index++;
+    }
+
+    if (isalpha(expr[index])) {
+        std::unordered_map<char, Letter>::iterator it = letters.find(expr[index]);
+        if (it != letters.end()) {
+            letterValue = isNegative ? it->second.getInverseValue() : it->second.getValue();
+            return true;
+        } else {
+            throw std::invalid_argument("Error occured, letter " + std::to_string(expr[index]) + " is undefined");
+        }
+    }
+    return false;
+}
+
 bool Letter::operator==(const Letter &letter) const {
     return this->letter == letter.getLetter();
 }

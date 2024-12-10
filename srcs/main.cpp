@@ -14,11 +14,12 @@ int main(int argc, char **argv) {
     letters.insert(std::make_pair('D', Letter('D')));
 
     std::unordered_map<std::string, Rule> rules;
-    rules.insert(std::make_pair("A | (B + C) => D", Rule("A | (B + C) => D")));
+    rules.insert(std::make_pair("A | (B + C) => D + C", Rule("A | (B + C) => D")));
 
-    std::vector<char> querries = std::vector<char>{'D'};
+    std::vector<char> querries = std::vector<char>{'C'};
 
     ExpertSys expertSys(letters, rules, querries);
 
     return 0;
+
 }

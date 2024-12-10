@@ -25,7 +25,7 @@ public:
     static LetterValue  andOp(LetterValue valueA, LetterValue valueB);
     static LetterValue  orOp(LetterValue valueA, LetterValue valueB);
     static LetterValue  xorOp(LetterValue valueA, LetterValue valueB);
-    static LetterValue  impliesOp(LetterValue valueA, LetterValue valueB);
+    static LetterValue  impliesOp(LetterValue valueA, LetterValue valueB, bool isLookingForB);
     static LetterValue  ifOnlyIfOp(LetterValue valueA, LetterValue valueB);
     static LetterValue  eval(LetterValue valueA, LetterValue valueB, Operator op);
 

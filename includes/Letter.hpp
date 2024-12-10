@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
+#include <stdexcept>
 
 enum LetterValueFrom {
     DEFAULT,
@@ -42,6 +44,8 @@ public:
     void                setValueFrom(LetterValueFrom valueFrom);
 
     void                addAssociateRuleValue(const std::string ruleName);
+
+    static bool         findIsLetter(const std::string &expr, std::size_t &index, LetterValue &letterValue, std::unordered_map<char, Letter> &letters);
 
     bool                operator==(const Letter &letter) const;
 

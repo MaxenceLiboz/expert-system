@@ -89,25 +89,33 @@ LetterValue Operator::xorOp(LetterValue valueA, LetterValue valueB) {
     }
 }
 
-LetterValue Operator::ifOnlyIfOp(LetterValue valueA, LetterValue valueB) {
-    if (valueA == UNDEFINED || valueB == UNDEFINED) {
-        return UNDEFINED;
-    } else if ((valueA == TRUE && valueB == TRUE) || (valueA == FALSE && valueB == FALSE)) {
+LetterValue Operator::ifOnlyIfOp(LetterValue valueA, LetterValue ruleValue) {
+    if (valueA == TRUE && ruleValue == TRUE) {
         return TRUE;
-    } else {
+    } else if (valueA == FALSE && ruleValue == TRUE) {
         return FALSE;
-    }
+    } else if (valueA == FALSE && ruleValue == FALSE){
+        return TRUE;
+    } else if (valueA == TRUE && ruleValue == FALSE){
+        return FALSE;
+    } else {
+        return UNDEFINED;
+    } 
 }
 
-LetterValue Operator::impliesOp(LetterValue valueA, LetterValue valueB) {
-    if (valueB == TRUE) {
-        return TRUE;
-    } else if (valueA == UNDEFINED || valueB == UNDEFINED) {
-        return UNDEFINED;
-    } else if (valueA == FALSE && valueB == FALSE) {
-        return TRUE;
+LetterValue Operator::impliesOp(LetterValue value, LetterValue ruleValue, bool isLookingForB) {
+    if (isLookingForB) {
+        if (value == TRUE && ruleValue == TRUE) {
+            return TRUE;
+        } else {
+            return UNDEFINED;
+        }
     } else {
-        return FALSE;
+        if ((value == TRUE && ruleValue == TRUE) || (value == FALSE && ruleValue == FALSE)) {
+            return TRUE;
+        } else {
+            return UNDEFINED;
+        }
     }
 }
 
@@ -123,7 +131,7 @@ LetterValue Operator::eval(LetterValue valueA, LetterValue valueB, Operator op) 
         case Operator::IF_ONLY_IF:
             return Operator::ifOnlyIfOp(valueA, valueB);
         case Operator::IMPLIES:
-            return Operator::impliesOp(valueA, valueB);
+            return Operator::impliesOp(valueA, TRUE, valueB);
         default:
             return UNDEFINED;
     }   

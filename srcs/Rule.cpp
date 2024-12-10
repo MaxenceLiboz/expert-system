@@ -18,9 +18,10 @@ void Rule::verifyRule() {
 
     while (index < this->value.size()) {
         verifyNextLetter(index, letter);
-        if (isRightSide) {
-            this->letters.push_back(letter);
-        }
+        // if (isRightSide) {
+        //     this->letters.push_back(letter);
+        // }
+        this->letters.push_back(letter);
         verifyNextOperator(index, isRightSide);
     }
 }
@@ -75,26 +76,65 @@ std::size_t HashRule::operator()(const Rule &rule) const {
     return std::hash<std::string>{}(rule.getValue());
 }
 
-bool Rule::isLetter(const std::string &expr, std::size_t &index, LetterValue &letterValue, std::unordered_map<char, Letter> &letters) {
-    bool isNegative = false;
-    if (expr[index] == '!') {
-        isNegative = true;
+void Rule::solve(const std::string &expr, std::unordered_map<char, Letter> &letters, char letterToFind) {
+    std::size_t index = 0;
+    Operator op;
+    bool    isLeftSide = false;
+
+    while (index < expr.size() && op.getValue() != Operator::IMPLIES && op.getValue() != Operator::IF_ONLY_IF) {
+        index++;
+        Operator::findIsOperator(expr, index, op);
+    }
+    std::string leftSideExpr = expr.substr(0, index - 1);
+    while (index < expr.size() && expr[index] != '>') {
         index++;
     }
+    std::string rightSideExpr = expr.substr(index + 1, expr.size() - index + 1);
 
-    if (isalpha(expr[index])) {
-        std::unordered_map<char, Letter>::iterator it = letters.find(expr[index]);
-        if (it != letters.end()) {
-            letterValue = isNegative ? it->second.getInverseValue() : it->second.getValue();
-            return true;
-        } else {
-            throw std::invalid_argument("Error occured, letter " + std::to_string(expr[index]) + " is undefined");
-        }
+    /**
+     * 
+     *     Find for TRUE and then FOR FALSE
+     *     Compare to needed value
+     *      If both are true => UNDEFINED
+     *      If one is true => Get its value
+     *      else throw an error (should not happend)
+     * 
+     */
+
+    // Check if the letter to find is in the right side of the left side
+    if (leftSideExpr.find(letterToFind) != std::string::npos) {
+        isLeftSide = true;
     }
-    return false;
+
+    std::unordered_map<char, Letter>::iterator itLetterToFind = letters.find(letterToFind);
+    if (itLetterToFind == letters.end()) {
+        throw std::runtime_error("The letter to find " + std::to_string(letterToFind) + " is not found in our letters map.");
+    }
+
+    // Value for the side without the letter to find
+    LetterValue valueWithoutLetter = Rule::solveExpr(isLeftSide ? rightSideExpr : leftSideExpr, letters);
+    // Try the solution with letterToFind = TRUE
+    itLetterToFind->second.setValue(TRUE);
+    LetterValue valueWithLetterTrue = Rule::solveExpr(isLeftSide ? leftSideExpr : rightSideExpr, letters);
+    // Try the solution with letterToFind = FALSE
+    itLetterToFind->second.setValue(FALSE);
+    LetterValue valueWithLetterFalse = Rule::solveExpr(isLeftSide ? leftSideExpr : rightSideExpr, letters);
+    // Value that the right side need to have
+    LetterValue valueNeededWithLetter = Operator::eval(valueWithoutLetter, isLeftSide ? FALSE : TRUE, op);
+
+    itLetterToFind->second.setValueFrom(RULES);
+    if (valueNeededWithLetter == UNDEFINED || (valueNeededWithLetter == valueWithLetterTrue && valueNeededWithLetter == valueWithLetterFalse)) {
+        itLetterToFind->second.setValue(UNDEFINED);
+    } else if (valueNeededWithLetter == valueWithLetterTrue && valueNeededWithLetter != valueWithLetterFalse) {
+        itLetterToFind->second.setValue(TRUE);
+    } else if (valueNeededWithLetter != valueWithLetterTrue && valueNeededWithLetter == valueWithLetterFalse) {
+        itLetterToFind->second.setValue(FALSE);
+    } else {
+        throw std::runtime_error("The value of the right side is not the same as the needed one with FALSE or TRUE value.");
+    }
 }
 
-LetterValue Rule::solveForLetter(const std::string &expr, std::unordered_map<char, Letter> &letters) {
+LetterValue Rule::solveExpr(const std::string &expr, std::unordered_map<char, Letter> &letters) {
     // Do the calculation
     LetterValue value = UNDEFINED;
     std::stack<LetterValue> values;
@@ -106,7 +146,7 @@ LetterValue Rule::solveForLetter(const std::string &expr, std::unordered_map<cha
     LetterValue valueB = UNDEFINED;
 
     for (std::size_t index = 0; index < expr.size(); index++) {
-        if (Rule::isLetter(expr, index, value, letters)) {
+        if (Letter::findIsLetter(expr, index, value, letters)) {
             values.push(value);
         } else if (expr[index] == '(') {
             std::size_t start = index + 1;
@@ -114,7 +154,7 @@ LetterValue Rule::solveForLetter(const std::string &expr, std::unordered_map<cha
                 index++;
             }
             std::string subExpretion = expr.substr(start, index - start);
-            values.push(Rule::solveForLetter(subExpretion, letters));
+            values.push(Rule::solveExpr(subExpretion, letters));
         } else if (Operator::findIsOperator(expr, index, op)) {
             operators.push(op);
         }

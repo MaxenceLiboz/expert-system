@@ -23,8 +23,7 @@ private:
     void        verifyNextLetter(std::size_t &index, char &c);
     void        verifyNextOperator(std::size_t &index, bool &isRightSide);
 
-    static bool isLetter(const std::string &expr, std::size_t &index, LetterValue &letterValue, std::unordered_map<char, Letter> &letters);
-    static bool isOperator(const std::string &expr, std::size_t &index, Operator &op);
+    static LetterValue  solveExpr(const std::string &expr, std::unordered_map<char, Letter> &letters);
 
 public:
     Rule(std::string rule);
@@ -37,7 +36,7 @@ public:
 
     bool                operator==(const Rule &rule) const;
 
-    static LetterValue  solveForLetter(const std::string &expr, std::unordered_map<char, Letter> &letters);
+    static void         solve(const std::string &expr, std::unordered_map<char, Letter> &letters, char letterToFind);
 };
 
 struct HashRule

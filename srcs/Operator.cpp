@@ -89,30 +89,28 @@ LetterValue Operator::xorOp(LetterValue valueA, LetterValue valueB) {
     }
 }
 
-LetterValue Operator::ifOnlyIfOp(LetterValue valueA, LetterValue ruleValue) {
-    if (valueA == TRUE && ruleValue == TRUE) {
+// The result of the implies is always true
+LetterValue Operator::ifOnlyIfOp(LetterValue value) {
+    if (value == TRUE) {
         return TRUE;
-    } else if (valueA == FALSE && ruleValue == TRUE) {
-        return FALSE;
-    } else if (valueA == FALSE && ruleValue == FALSE){
-        return TRUE;
-    } else if (valueA == TRUE && ruleValue == FALSE){
+    } else if (value == FALSE) {
         return FALSE;
     } else {
         return UNDEFINED;
-    } 
+    }    
 }
 
-LetterValue Operator::impliesOp(LetterValue value, LetterValue ruleValue, bool isLookingForB) {
+// The result of the implies is always true
+LetterValue Operator::impliesOp(LetterValue value, bool isLookingForB) {
     if (isLookingForB) {
-        if (value == TRUE && ruleValue == TRUE) {
+        if (value == TRUE) {
             return TRUE;
         } else {
             return UNDEFINED;
         }
     } else {
-        if ((value == TRUE && ruleValue == TRUE) || (value == FALSE && ruleValue == FALSE)) {
-            return TRUE;
+        if (value == FALSE) {
+            return FALSE;
         } else {
             return UNDEFINED;
         }
@@ -129,9 +127,9 @@ LetterValue Operator::eval(LetterValue valueA, LetterValue valueB, Operator op) 
         case Operator::XOR:
             return Operator::xorOp(valueA, valueB);
         case Operator::IF_ONLY_IF:
-            return Operator::ifOnlyIfOp(valueA, valueB);
+            return Operator::ifOnlyIfOp(valueA);
         case Operator::IMPLIES:
-            return Operator::impliesOp(valueA, TRUE, valueB);
+            return Operator::impliesOp(valueA, valueB);
         default:
             return UNDEFINED;
     }   

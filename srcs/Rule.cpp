@@ -81,6 +81,13 @@ void Rule::solve(const std::string &expr, std::unordered_map<char, Letter> &lett
     Operator op;
     bool    isLeftSide = false;
 
+    // Get the iterator of the letter
+    std::unordered_map<char, Letter>::iterator itLetterToFind = letters.find(letterToFind);
+    if (itLetterToFind == letters.end()) {
+        throw std::runtime_error("The letter to find " + std::to_string(letterToFind) + " is not found in our letters map.");
+    }
+
+    // Decompose the expr in two to get the left side and the right side.
     while (index < expr.size() && op.getValue() != Operator::IMPLIES && op.getValue() != Operator::IF_ONLY_IF) {
         index++;
         Operator::findIsOperator(expr, index, op);
@@ -91,26 +98,13 @@ void Rule::solve(const std::string &expr, std::unordered_map<char, Letter> &lett
     }
     std::string rightSideExpr = expr.substr(index + 1, expr.size() - index + 1);
 
-    /**
-     * 
-     *     Find for TRUE and then FOR FALSE
-     *     Compare to needed value
-     *      If both are true => UNDEFINED
-     *      If one is true => Get its value
-     *      else throw an error (should not happend)
-     * 
-     */
+    // Save the old value of the letter
+    LetterValue tmpValue  = itLetterToFind->second.getValue();
 
     // Check if the letter to find is in the right side of the left side
     if (leftSideExpr.find(letterToFind) != std::string::npos) {
         isLeftSide = true;
     }
-
-    std::unordered_map<char, Letter>::iterator itLetterToFind = letters.find(letterToFind);
-    if (itLetterToFind == letters.end()) {
-        throw std::runtime_error("The letter to find " + std::to_string(letterToFind) + " is not found in our letters map.");
-    }
-
     // Value for the side without the letter to find
     LetterValue valueWithoutLetter = Rule::solveExpr(isLeftSide ? rightSideExpr : leftSideExpr, letters);
     // Try the solution with letterToFind = TRUE
@@ -122,7 +116,6 @@ void Rule::solve(const std::string &expr, std::unordered_map<char, Letter> &lett
     // Value that the right side need to have
     LetterValue valueNeededWithLetter = Operator::eval(valueWithoutLetter, isLeftSide ? FALSE : TRUE, op);
 
-    itLetterToFind->second.setValueFrom(RULES);
     if (valueNeededWithLetter == UNDEFINED || (valueNeededWithLetter == valueWithLetterTrue && valueNeededWithLetter == valueWithLetterFalse)) {
         itLetterToFind->second.setValue(UNDEFINED);
     } else if (valueNeededWithLetter == valueWithLetterTrue && valueNeededWithLetter != valueWithLetterFalse) {
@@ -132,6 +125,10 @@ void Rule::solve(const std::string &expr, std::unordered_map<char, Letter> &lett
     } else {
         throw std::runtime_error("The value of the right side is not the same as the needed one with FALSE or TRUE value.");
     }
+    if ((itLetterToFind->second.getValueFrom() == RULES || itLetterToFind->second.getValueFrom() == INIT_FACTS) && itLetterToFind->second.getValue() != tmpValue) {
+        throw std::invalid_argument("Rule(s) does not give the same results given by other or initial fact.");
+    }
+    itLetterToFind->second.setValueFrom(RULES);
 }
 
 LetterValue Rule::solveExpr(const std::string &expr, std::unordered_map<char, Letter> &letters) {

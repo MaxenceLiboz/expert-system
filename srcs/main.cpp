@@ -1,5 +1,9 @@
 #include "main.hpp"
-
+//   Rule rule = Rule("E + F => !V"); // Pour F FALSE = V = UNDEFINED;  
+//     Rule rule = Rule("C => E"); // E = TRUE
+//     Rule rule = Rule("A + B + C => D"); // D = TRUE
+//     Rule rule = Rule("A | B => C"); // C = TRUE
+//     Rule rule = Rule("C | D => X | V"); // Pour X = FALSE = V = TRUE ; X = UNDEFINED
 int main(int argc, char **argv) {
     std::cout << "Hello world" << std::endl;
     std::cout << "Number of args: " <<  (argc - 1) << std::endl;
@@ -10,13 +14,16 @@ int main(int argc, char **argv) {
     std::unordered_map<char, Letter> letters;
     letters.insert(std::make_pair('A', Letter('A', TRUE, INIT_FACTS)));
     letters.insert(std::make_pair('B', Letter('B', TRUE, INIT_FACTS)));
-    letters.insert(std::make_pair('C', Letter('C')));
-    letters.insert(std::make_pair('D', Letter('D')));
 
     std::unordered_map<std::string, Rule> rules;
-    rules.insert(std::make_pair("A | (B + C) => D + C", Rule("A | (B + C) => D")));
+    Rule rule = Rule("E + F => !V"); // 
+    Rule rule = Rule("C => E"); // E TRUE
+    Rule rule = Rule("A + B + C => D"); // D TRUE 
+    Rule rule = Rule("A | B => C"); // C TRUE
+    Rule rule = Rule("C | D => X | V"); // X TRUE
+    rules.insert(std::make_pair(rule.getValue(), rule));
 
-    std::vector<char> querries = std::vector<char>{'C'};
+    std::vector<char> querries = std::vector<char>{'V', 'X'};
 
     ExpertSys expertSys(letters, rules, querries);
 

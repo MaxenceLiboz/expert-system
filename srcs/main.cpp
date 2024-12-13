@@ -1,9 +1,4 @@
 #include "main.hpp"
-//   Rule rule = Rule("E + F => !V"); // Pour F FALSE = V = UNDEFINED;  
-//     Rule rule = Rule("C => E"); // E = TRUE
-//     Rule rule = Rule("A + B + C => D"); // D = TRUE
-//     Rule rule = Rule("A | B => C"); // C = TRUE
-//     Rule rule = Rule("C | D => X | V"); // Pour X = FALSE = V = TRUE ; X = UNDEFINED
 int main(int argc, char **argv) {
     std::cout << "Hello world" << std::endl;
     std::cout << "Number of args: " <<  (argc - 1) << std::endl;
@@ -16,11 +11,11 @@ int main(int argc, char **argv) {
     letters.insert(std::make_pair('B', Letter('B', TRUE, INIT_FACTS)));
 
     std::unordered_map<std::string, Rule> rules;
-    Rule rule = Rule("E + F => !V"); // 
-    Rule rule = Rule("C => E"); // E TRUE
-    Rule rule = Rule("A + B + C => D"); // D TRUE 
-    Rule rule = Rule("A | B => C"); // C TRUE
-    Rule rule = Rule("C | D => X | V"); // X TRUE
+    Rule rule = Rule("E + F => !V"); // Pour F FALSE = V = UNDEFINED;  
+    Rule rule = Rule("C => E"); // E = TRUE
+    Rule rule = Rule("A + B + C => D"); // D = TRUE
+    Rule rule = Rule("A | B => C"); // C = TRUE
+    Rule rule = Rule("C | D => X | V"); // Pour X = FALSE = V = TRUE ; X = UNDEFINED
     rules.insert(std::make_pair(rule.getValue(), rule));
 
     std::vector<char> querries = std::vector<char>{'V', 'X'};

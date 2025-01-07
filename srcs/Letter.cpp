@@ -51,6 +51,24 @@ void Letter::addAssociateRuleValue(std::string ruleName) {
     this->associateRulesValue.push_back(ruleName);
 }
 
+std::vector<std::string> Letter::getAssociateRulesValue() const {
+    return this->associateRulesValue;
+}
+std::string Letter::printValue() const {
+    switch (this->value)
+    {
+    case UNDEFINED:
+        return "UNDEFINED is the value of " + std::string(1,this->letter);
+        break;
+    case TRUE:
+        return "TRUE is the value of " + std::string(1, this->letter);
+        break;
+    case FALSE:
+        return "FALSE is the value of " + std::string(1,this->letter);
+        break;
+    }
+};
+
 bool Letter::findIsLetter(const std::string &expr, std::size_t &index, LetterValue &letterValue, std::unordered_map<char, Letter> &letters) {
     bool isNegative = false;
     if (expr[index] == '!') {

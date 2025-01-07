@@ -5,6 +5,7 @@
 #include <map>
 #include <queue>
 #include <unordered_map>
+#include <unordered_set>
 #include <algorithm>
 #include <stdexcept>
 #include <stack>
@@ -29,14 +30,15 @@ public:
     Rule(std::string rule);
     ~Rule();
 
-    std::string         getValue() const;
-    std::vector<char>   getLettersNeeded() const;
+    std::string                 getValue() const;
+    std::vector<char>           getLettersNeeded() const;
+    std::unordered_set<char>   getLettersDefault(std::unordered_map<char, Letter> &expertSysletters) const;
 
-    void                setValue(std::string value);
+    void                        setValue(std::string value);
 
-    bool                operator==(const Rule &rule) const;
+    bool                        operator==(const Rule &rule) const;
 
-    static void         solve(const std::string &expr, std::unordered_map<char, Letter> &letters, char letterToFind);
+    static void                 solve(const std::string &expr, std::unordered_map<char, Letter> &letters, char letterToFind);
 };
 
 struct HashRule

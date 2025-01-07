@@ -34,10 +34,12 @@ public:
     ~Letter();
 
 
-    char                getLetter() const;
-    LetterValue         getValue() const;
-    LetterValue         getInverseValue() const;
-    LetterValueFrom     getValueFrom() const;
+    char                        getLetter() const;
+    LetterValue                 getValue() const;
+    LetterValue                 getInverseValue() const;
+    LetterValueFrom             getValueFrom() const;
+    std::vector<std::string>    getAssociateRulesValue() const;
+    std::string                 printValue() const;
 
 
     void                setValue(LetterValue value);

@@ -18,9 +18,6 @@ void Rule::verifyRule() {
 
     while (index < this->value.size()) {
         verifyNextLetter(index, letter);
-        // if (isRightSide) {
-        //     this->letters.push_back(letter);
-        // }
         this->letters.push_back(letter);
         verifyNextOperator(index, isRightSide);
     }
@@ -41,7 +38,7 @@ void Rule::verifyNextLetter(std::size_t &index, char &c) {
 
 void Rule::verifyNextOperator(std::size_t &index, bool &isRightSide) {
     std::size_t start = index;
-    while (index < this->value.size() && !isalpha(this->value[index]) && this->value[index] != '(' && this->value[index] != ')') {
+    while (index < this->value.size() && !isalpha(this->value[index]) && this->value[index] != '(' && this->value[index] != ')' && this->value[index] != '!') {
         index++;
     }
     std::string op = this->value.substr(start, index - start);
@@ -66,6 +63,17 @@ void Rule::setValue(std::string value) {
 
 std::vector<char>  Rule::getLettersNeeded() const {
     return this->letters;
+}
+
+std::unordered_set<char>  Rule::getLettersDefault(std::unordered_map<char, Letter> &expertSysletters) const {
+    std::unordered_set<char> lettersDefault;
+    for (char letterTmp : this->letters) {
+        std::unordered_map<char, Letter>::iterator letter = expertSysletters.find(letterTmp);
+        if (letter->second.getValueFrom() == DEFAULT || letter->second.getValue() == UNDEFINED) {
+            lettersDefault.insert(letterTmp);
+        }
+    }
+    return lettersDefault;
 }
 
 bool Rule::operator==(const Rule &rule) const {
@@ -116,17 +124,24 @@ void Rule::solve(const std::string &expr, std::unordered_map<char, Letter> &lett
     // Value that the right side need to have
     LetterValue valueNeededWithLetter = Operator::eval(valueWithoutLetter, isLeftSide ? FALSE : TRUE, op);
 
-    if (valueNeededWithLetter == UNDEFINED || (valueNeededWithLetter == valueWithLetterTrue && valueNeededWithLetter == valueWithLetterFalse)) {
+    if ((valueNeededWithLetter == UNDEFINED && itLetterToFind->second.getValueFrom() == DEFAULT) 
+        || (valueNeededWithLetter == valueWithLetterTrue && valueNeededWithLetter == valueWithLetterFalse)
+        || (valueWithLetterTrue == UNDEFINED && valueWithLetterFalse == UNDEFINED)) {
         itLetterToFind->second.setValue(UNDEFINED);
-    } else if (valueNeededWithLetter == valueWithLetterTrue && valueNeededWithLetter != valueWithLetterFalse) {
-        itLetterToFind->second.setValue(TRUE);
+
     } else if (valueNeededWithLetter != valueWithLetterTrue && valueNeededWithLetter == valueWithLetterFalse) {
         itLetterToFind->second.setValue(FALSE);
+    } else if (valueNeededWithLetter != valueWithLetterFalse && valueNeededWithLetter == valueWithLetterTrue) {
+        itLetterToFind->second.setValue(TRUE);
+    } else if (itLetterToFind->second.getValueFrom() != DEFAULT) {
+        itLetterToFind->second.setValue(tmpValue);
     } else {
         throw std::runtime_error("The value of the right side is not the same as the needed one with FALSE or TRUE value.");
     }
-    if ((itLetterToFind->second.getValueFrom() == RULES || itLetterToFind->second.getValueFrom() == INIT_FACTS) && itLetterToFind->second.getValue() != tmpValue) {
-        throw std::invalid_argument("Rule(s) does not give the same results given by other or initial fact.");
+    if ((itLetterToFind->second.getValueFrom() == RULES || itLetterToFind->second.getValueFrom() == INIT_FACTS) 
+        && itLetterToFind->second.getValue() != tmpValue 
+        && itLetterToFind->second.getValue() != UNDEFINED && tmpValue != UNDEFINED) {
+        throw std::invalid_argument("Rule(s) does not give the same results given by other rule or initial fact for letter " + std::string(1,letterToFind));
     }
     itLetterToFind->second.setValueFrom(RULES);
 }

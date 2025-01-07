@@ -70,10 +70,10 @@ LetterValue Operator::andOp(LetterValue valueA, LetterValue valueB) {
 }
 
 LetterValue Operator::orOp(LetterValue valueA, LetterValue valueB) {
-    if (valueA == TRUE || valueB == TRUE) {
-        return TRUE;
-    } else if (valueA == UNDEFINED || valueB == UNDEFINED) {
+    if (valueA == UNDEFINED || valueB == UNDEFINED) {
         return UNDEFINED;
+    } if (valueA == TRUE || valueB == TRUE) {
+        return TRUE;
     } else {
         return FALSE;
     }

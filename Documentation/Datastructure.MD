@@ -40,7 +40,7 @@ For each calcul in calculus:
                                 value
         else
             arg1 = oldArg
-        sign = readSign() # Will read the different sign possible can throw
+        sign = readOperator() # Will read the different sign possible can throw
         arg2 = readArg() # readArg will read all parentheses if there are as one argument and get the value
         value = calc(arg1, arg2, sign) # Gonna do a calculus depending on the sign 
         oldArg = value

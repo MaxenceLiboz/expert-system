@@ -11,7 +11,11 @@ COLOR_BLUE	=	\033[36m
 ################################################################################
 CACHE = .cache
 SRCS_DIR = srcs
-SRCS = 	main.cpp 	
+SRCS = 	main.cpp	 	\
+		Letter.cpp		\
+		Rule.cpp		\
+		ExpertSys.cpp	\
+		Operator.cpp
 		
 NAME = expert-system
 
@@ -37,7 +41,7 @@ define print_progress
         printf "$(COLOR_BLUE)Starting compilation...\n$(COLOR_NORM)"; \
   fi
 	@printf "\r\033[K\t$(COLOR_BLUE)[$(PERCENT)%%]\t--> $(COLOR_NORM)$<\$(COLOR_NORM)"
-	@printf "\r\033[K\t$(COLOR_BLUE)[$(PERCENT)%%]\t--> $(COLOR_NORM)$<\$(COLOR_NORM)"
+	@printf "\r\033[K\t$(COLOR_BLUE)[$(PERCENT)%%]\t--> $(COLOR_NORM)$<\$(COLOR_NORM)\n"
 endef
 
 # Compilation rule for object files
